@@ -1,0 +1,16 @@
+{%extends 'all-news/base.html'%}
+{% load bootstrap3 %}
+
+{% block content %}
+<!-- Some content here-->
+<div class="container">
+
+    <form action="{% url 'post_image' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form layout='inline' %}
+
+        <input type="submit" class="btn btn-success btn-lg" value="Submit" />
+    </form>
+
+</div>
+{% endblock %}
