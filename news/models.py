@@ -12,7 +12,6 @@ class Profile(models.Model):
     bio = models.TextField(null=True)
     profile_picture = models.ImageField(upload_to='profiles/')
 
-
     @classmethod
     def get_profiles(cls):
         '''
@@ -48,16 +47,16 @@ class Image(models.Model):
         images = Image.objects.all()
         return images
 
+
 class Follow(models.Model):
     user = models.ForeignKey(User)
     follower = models.ForeignKey(Profile, related_name='following')
     followee = models.ForeignKey(Profile, related_name='followers')
 
-
     def __str__(self):
         return self.user.username
 
     @classmethod
-    def get_following(cls, user_id):
-        following = Follow.objects.filter(user=user_id).all()
-        return following
+    def get_followees(cls, user_id):
+        followeers = Follow.objects.filter(user=user_id).all()
+        return followeers

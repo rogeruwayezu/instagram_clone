@@ -1,0 +1,42 @@
+{%extends 'all-news/base.html'%}
+
+{% block content %}
+
+<div class="container">
+    <div class="row ">
+        <h1> My Profile</h1>
+        <div class="col-md-4 col-lg-4 ">
+            <h4>Name: {{current_user.username}}</h4>
+            <img src="{{profile.profile_picture.url}}" alt="{{request.user.username}}" class="img-responsive img-thumbnail"
+                width="60%" height="40%" id="circular-image" style="border: 10px solid rgb(36, 74, 130,0); margin-bottom:20px;margin-bottom:20px;margin-left:20%; border-radius: 360px;"
+                ); <hr>
+            <p class="well">
+                <span>Bio :</span> {{profile.bio}}</p>
+
+        </div>
+
+
+        <!-- Post of logged in user  -->
+        <div class=" well col-md-6 " style="padding:5px; border:2px; float:right; height:40%">
+
+            <p style="text-align:left; font-size:25px;"> My Posts</p>
+            {% for image in my_images %}
+            {% if image %}
+            <div class="col-md-8 col-sm-12">
+
+                <img src="{{image.image.url}}" alt="{{Image.image_name}}" class="img-responsive img-thumbnail postImage"
+                    width="90%" height="90" style="padding:20px; margin-top:10px">
+                <p style="text-align:left; margin-left:20px;">Image Title: {{image.image_name}}</p>
+            </div>
+            {% else %}
+            <p>no image yet</p>
+
+            {% endif %} {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+
+
+{% endblock %}

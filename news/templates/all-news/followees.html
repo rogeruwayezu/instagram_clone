@@ -1,0 +1,50 @@
+{% extends 'all-news/base.html' %}
+
+{% block content %}
+
+<section class="no-touch col-md-5">
+    {% for image in images %}
+    <div class="wrap col-md-12" style="border-bottom: 2px solid rgb(19, 175, 167);">
+        <div class="box col-md-12">
+            <div class="">
+
+                <img src="{{ image.image.url }}" class="img-responsive" style="height:60%; width:90%; margin-left:10px; margin-bottom:10px;margin-top:10px; border-radius: 5px">
+
+                <div style="margin-bottom:30px;">
+                    <p>Image caption: {{image.image_caption}}</p>
+                    <span style="color:rgb(35, 106, 180)">
+                        <p>Posted by: {{image.user.username}}</p>
+                    </span>
+
+                    <button type="button" class="btn btn-primary" name="button">Comment</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</section>
+
+<section class="col-md-5 col-sm-12">
+    <center>
+        <p style=" margin-left:10px;color:rgb(4, 47, 74); padding-top:10px; margin-right:20px;font-size:25px; font-family: 'Kavivanar', cursive;
+">explore</p>
+    </center>
+    {%for profile in profiles %}
+    <div class="col-md-4">
+        {% if profile %}
+
+        <img src="{{ profile.profile_picture.url }}" class="img-responsive" style="margin-top:10px;height:40px;width:40px; border-radius:50%; ">
+    </div>
+    </div>
+    <div class="col-md-8">
+        <a href="{% url 'differentProfile' profile.id %}">
+            <p style="font-family: 'Kavivanar', cursive; padding-top:10px;font-size:23px; color: gray">{{profile.user}}</p>
+        </a>
+
+    </div>
+
+    {% endif %} {% endfor %}
+</section>
+{% endblock %}

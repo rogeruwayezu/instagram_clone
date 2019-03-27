@@ -1,15 +1,15 @@
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse" style="background-color: white;">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="{% url 'Home' %}">The Moringa Tribune</a>
+            <a href="/"><img src="../static/images/Instagram_icon.png" width="40px;" height="40px" style="margin-top:15%;"></a>
+            <a href="{% url 'Home' %}" id="instTitle" style="color: black">
+                {{request.user.username}}
+
         </div>
-
-        <!-- Adding a search form  -->
-
 
 
         <!-- search form end -->
-        <div class="col-sm-6 col-md-6">
+        <div class="navbar-right">
             {% if user.is_authenticated %}
             <ul>
                 <li class="dropdown">
@@ -36,6 +36,27 @@
             </li>
 
             {% endif %}
+        </div>
+        <ul class="nav nav-tabs navbar-right">
+            <li><a href="/"><img class="img-responsive" src="../static/images/explore.png" style="width: 25px; height: 25px; margin: 5px; margin-bottom: 8px; margin-top: 2px;"></a></li>
+            {% if request.user.profile %}
+            <li><a href="/profile/{{request.user.profile.id}}"><img class="img-responsive" src="../static/images/person.png"
+                        style="width: 25px; height: 25px; margin: 5px; margin-top: 2px;"></a></li>
+            {% else %}
+            <li><a href="/profile/new"><img class="img-responsive" src="../static/images/person.png" style="width: 25px; height: 25px; margin: 5px; margin-top: 2px;"></a></li>
+            {% endif %}
+            <li><a href="/followees"><img class="img-responsive" src="../static/images/heart.png" style="width: 30px; height: 30px; margin: 5px; margin-top: 2px;"></a></li>
+            <li><a href="/post/new"><img class="img-responsive" src="../static/images/baseline-add_circle_outline-24px.svg"
+                        style="width: 30px; height: 30px; margin: 5px; margin-top: 2px;"></a></li>
+        </ul>
+
+        <!-- Adding a search form  -->
+        <div style="text-align: center; margin-top: -0.10%; margin-left: 15%">
+            <form class="navbar-form" role="search" action="">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" name="grammer" style="border-radius: 5px; text-align: center">
+                </div>
+            </form>
         </div>
     </div>
 </nav>

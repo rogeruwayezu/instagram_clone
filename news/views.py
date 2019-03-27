@@ -12,13 +12,14 @@ from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 
 
+@login_required()
 def welcome(request):
     ''' welcome'''
     # images = Image.objects.all()
     current_user = request.user
     profiles = Profile.get_profiles
 
-    following = Follow.get_following(current_user.id)
+    following = Follow.get_followees(current_user.id)
 
     images = []
     for followed in following:
@@ -35,32 +36,10 @@ def welcome(request):
     return render(request, 'all-news/home.html', {"images": images, "following": following, "user": current_user, "profiles": profiles})
 
 
-# def new_post(request):
-#     '''
-#     View function to display a form for creating a post to a logged in authenticated user
-#     '''
-#     current_user = request.user
-
-#     if request.method == 'POST':
-
-#         form = PostForm(request.POST, request.FILES)
-
-#         if form.is_valid():
-#             image = form.cleaned_data['image']
-#             image_name = form.cleaned_data['image_name']
-#             image_caption = form.cleaned_data['image_caption']
-#             post_image = Image(
-#                 image=image, image_name=image_name, image_caption=image_caption, user=current_user)
-#             post_image.save()
-#             HttpResponseRedirect('Home')
-#     else:
-#         form = PostForm()
-#     return render(request, 'all-news/new-post.html', {"imageForm": form})
-
-
+@login_required()
 def new_post(request):
     '''
-    View function to display a form for creating a post to a logged in authenticated user
+    display a form for creating a post to a logged in authenticated user
     '''
     current_user = request.user
 
@@ -94,7 +73,7 @@ def new_post(request):
 #         return render(request, 'all-news/search.html', {"message": message})
 
 
-@login_required(login_url='/accounts/login')
+@login_required()
 def create_profile(request):
     '''
     View function to create and update the profile of the user
@@ -113,7 +92,24 @@ def create_profile(request):
     return render(request, 'all-news/profile.html', {"form": form})
 
 
-@login_required(login_url='/accounts/login')
+@login_required()
+def view_profile(request, profile_id):
+    '''
+    function for displaying the profile of the logged in user
+    '''
+    try:
+        current_user = request.user
+        profile = Profile.objects.get(id=profile_id)
+        print(profile)
+        my_images = Image.objects.filter(user=current_user.id).all()
+        print(my_images)
+        return render(request, 'my-profile.html', {"profile": profile, "current_user": current_user, "my_images": my_images})
+
+    except ValueError:
+        raise Http404()
+
+
+@login_required()
 def different_profile(request, profile_id):
     '''
     View function to display a profile information of other users
@@ -126,7 +122,8 @@ def different_profile(request, profile_id):
 
         follow_profile = Profile.objects.get(id=profile_id)
 
-        check_if_following = Follow.objects.filter(user=current_user, follower=follow_profile).count()
+        check_if_following = Follow.objects.filter(
+            user=current_user, follower=follow_profile).count()
 
         images = Image.objects.all().filter(user_id=profile_id)
         images_number = images.count()
@@ -139,8 +136,7 @@ def different_profile(request, profile_id):
     return render(request, 'all-news/different-profile.html', {"title": title, "images_number": images_number, "current_user": current_user, "profile": profile, "images": images, "check_if_following": check_if_following})
 
 
-
-@login_required(login_url='/accounts/login')
+@login_required()
 def follow(request, id):
     '''
     View function add frofiles of other users to your timeline
@@ -154,9 +150,28 @@ def follow(request, id):
 
     if check_if_following == 0:
 
-        following = Follow(user=current_user, followee=follow_profile, follower=current_user.profile)
+        following = Follow(
+            user=current_user, followee=follow_profile, follower=current_user.profile)
         following.save()
     else:
         pass
 
     return redirect(welcome)
+
+
+@login_required()
+def view_followees(request):
+    ''' welcome'''
+    current_user = request.user
+    following = Follow.get_followees(current_user.id)
+    images = []
+    for followed in following:
+        profiles = Profile.objects.filter(id=followed.followee.id)
+        for profile in profiles:
+            post = Image.objects.filter(user=profile.user)
+
+            for image in post:
+                images.append(image)
+
+    profiles = Profile.get_profiles()
+    return render(request, 'all-news/followees.html', {"images": images, "following": following, "user": current_user, "profiles": profiles})

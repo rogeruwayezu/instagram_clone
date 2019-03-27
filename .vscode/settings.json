@@ -1,3 +1,8 @@
 {
-    "python.pythonPath": "virtual/bin/python2.7"
+    "python.pythonPath": "virtual/bin/python2.7",
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": true,
+    "files.autoSave": "onFocusChange",
+    "editor.wordWrap": "on",
+    "python.linting.pep8Enabled": true
 }
